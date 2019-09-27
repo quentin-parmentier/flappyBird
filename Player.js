@@ -7,6 +7,8 @@ class Player{
         this.velX = panSpeed;
         this.maxY = y*2;
         this.size = 30;
+        this.alive = true;
+        this.score = 0;
     }
 
     show(){
@@ -19,6 +21,9 @@ class Player{
         this.velY += gravity;
         //Can't go less than height max
         this.y += this.velY;
+        if(this.velY > 10){
+            this.velY = 10;
+        }
 
         if(this.y > canvas.height){
             this.y = canvas.height;
@@ -27,13 +32,41 @@ class Player{
         }
         
         if(pipes[0].colided(this)){
-            this.y = 0;
+            if(!LEARNING){
+                this.alive = false;
+            }
+        }else{
+            this.score = this.score + 1;
         }
         
     }
 
     flap(){
-        this.velY = -10;
+        this.velY = -12;
     }
 
+    distance(pipes){
+        let Dx = pipes[0].x - this.x + pipes[0].w/2;
+        let Dy = pipes[0].topY - this.y + pipes[0].gap/2;
+        let Dx2 = 0;
+        let Dy2 = 0;
+
+        if(pipes[1]){
+            let Dx2 = pipes[1].x - this.x + pipes[1].w/2;
+            let Dy2 = pipes[1].topY - this.y + pipes[1].gap/2;
+        }
+
+        Dx = Dx / canvas.width;
+        Dy = Dy / canvas.height;
+        Dx2 = Dx2 / canvas.width;
+        Dy2 = Dy2 / canvas.height;
+
+        let velY = -1;
+
+        if(this.velY > 0){
+            velY = 1;
+        }
+
+        return [Dx,Dy,velY];
+    }
 }

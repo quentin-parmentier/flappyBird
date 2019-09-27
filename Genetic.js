@@ -1,0 +1,130 @@
+import RNN from "./RNN.js";
+
+//Exemple [{size:2,fnc:""} , {size:3,fnc:"linear"} , {size:2,fnc:"linear"}]
+
+var POP = [];
+var NB_POP = 1000;
+var TOP_SELECT = 50;
+var MUTATION_RATE = 0.1;
+var LEARNING = true;
+var GENERATION = 1;
+var STEP = 0;
+
+//Initialisation du réseau
+function createFirstGeneration(tab_reseau,nb_wanted){
+    
+    NB_POP = nb_wanted;
+
+    for (let index = 0; index < nb_wanted; index++) {
+        POP.push(new RNN(tab_reseau,[]));
+    }
+}
+
+//Calcul les valeurs de sorties
+function activateRNN(entry_value){
+    POP.forEach(element => {
+       let sortie_value = element.calculerSorties(entry_value);
+       
+       //Est-ce qu'on saute ?
+
+    });
+}
+
+//On récupère les x meilleurs réseaux
+function getTopPOP(){
+    var listTop = new Array();
+
+    POP.sort((a, b) => a.getScore > b.getScore ? 1 : -1); //Tri du plus petit au plus grand
+    listTop = POP.slice(0,TOP_SELECT);
+    return listTop;
+}
+
+//On accouple les différents réseaux en fonction de leurs poids et performance
+function creatingBabies(tab_reseau){
+    GENERATION ++;
+    console.log("GENERATION : " + GENERATION);
+    let topPOP = getTopPOP();
+
+    topPOP.forEach(element => {
+
+        element.setScore = 0;
+
+    })
+    
+    let newGen = new Array();
+    newGen = topPOP;
+
+    for (let index = 0; index < NB_POP - TOP_SELECT; index++) {
+
+        //On récupère deux parents
+        let parentOne = topPOP[Math.floor(Math.random() * Math.floor(TOP_SELECT))];
+        let parentTwo = topPOP[Math.floor(Math.random() * Math.floor(TOP_SELECT))];
+
+        
+        //On récupère la moitié des poids de l'un et de l'autre
+        let wOne = parentOne.getW;
+        let wTwo = parentTwo.getW;
+        
+        let newWeigths = [];
+
+        wOne.slice(0,wOne.length/2).forEach(element => {
+            newWeigths.push(element);
+        });
+
+        wTwo.slice(wTwo.length/2,wTwo.length).forEach(element => {
+            newWeigths.push(element);
+        });
+
+        newWeigths = mutateBabies(newWeigths);
+
+        newGen.push(new RNN(tab_reseau,newWeigths));
+    }
+
+    POP = newGen;
+}
+
+//Mutation du nouveau bébé
+function mutateBabies(tab_weigths){
+    
+    let mutate_tab = new Array();
+    tab_weigths.forEach(element => {
+        if(Math.random() < MUTATION_RATE){
+            mutate_tab.push(Math.random());
+        }else{
+            mutate_tab.push(element);
+        }
+    });
+    return mutate_tab;
+}
+
+//Fais avancer de 1 l'évolution (Gen 1 --> Gen 2)
+function oneStep(entry_value,tab_reseau){
+
+    activateRNN(entry_value);
+    STEP++;
+
+    if(ALL_DEAD){
+        STEP = 0;
+        creatingBabies(tab_reseau);
+    }
+
+}
+
+//createFirstGeneration(tab_reseau,100)
+
+/*$(window).mousemove(function( event ) {
+
+    let heigthPage = $( window ).height();
+    let widthPage = $( window ).width();
+    let entry_value = [event.pageX/widthPage,event.pageY/heigthPage];
+
+    oneStep(entry_value,tab_reseau)
+
+    //console.log(POP[0])
+    drawcircle(POP[0].sortie[0]*widthPage,POP[0].sortie[1]*heigthPage);
+})
+
+$(window).click(function(event){
+    LEARNING = !LEARNING;
+    console.log("Learning : "+LEARNING);
+});*/
