@@ -8,7 +8,7 @@ var nb_pipes= 0;
 
 ///GEN PART
 var POP = [];
-var NB_POP = 300;
+var NB_POP = 200;
 var TOP_SELECT = 15;
 var MUTATION_RATE = 0.10;
 var LEARNING = true;
