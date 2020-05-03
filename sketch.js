@@ -17,7 +17,7 @@ var STEP = 0;
 const tab_reseau = [{size:3,fnc:""} , {size:2,fnc:"linear"} , {size:1,fnc:"linear"}]
 
 function setup(){
-    window.canvas = createCanvas(800,1200);
+    window.canvas = createCanvas(800,window.innerHeight);
     players = [];
     frameCount = 0;
     nb_pipes = 0;
